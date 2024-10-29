@@ -1,0 +1,10 @@
+{
+    "require": {
+        "php-patterns/activerecord": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Database\\Entities\\": "Infrastructure/Database/Entities"
+        }
+    }
+}

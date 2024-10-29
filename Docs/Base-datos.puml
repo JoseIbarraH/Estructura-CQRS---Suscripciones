@@ -1,0 +1,52 @@
+@startuml Suscripciones
+
+entity "Clientes" {
+    + cedula: INT (PK)
+    --
+    nombre: VARCHAR(100)
+    apellido: VARCHAR(100)
+    email: VARCHAR(100) (UNIQUE)
+    telefono: VARCHAR(20)
+    tipo: VARCHAR(20)
+    clave: VARCHAR(20)
+    direccion: VARCHAR(200)
+}
+
+entity "TiposSuscripcion" {
+    + idTipoSuscripcion: INT (PK)
+    --
+    nombreTipo: VARCHAR(100)
+    descripcion: TEXT
+    precioBase: DECIMAL(10, 2)
+}
+
+entity "Suscripciones" {
+    + codigo: INT (PK)
+    --
+    password: VARCHAR(255)
+    email: VARCHAR(100)
+    idCliente: INT (FK)
+    fechaSuscripcion: DATE
+    estado: ENUM('activa', 'inactiva', 'pendiente')
+    tipoSuscripcion: INT (FK)
+    fechaExpiracion: DATE
+    precio: DECIMAL(10, 2)
+    detalles: TEXT
+}
+
+entity "Pagos" {
+    + idPago: INT (PK)
+    --
+    codigoSuscripcion: INT (FK)
+    fechaPago: DATE
+    monto: DECIMAL(10, 2)
+    metodoPago: ENUM('tarjeta', 'paypal', 'transferencia')
+    estadoPago: ENUM('completado', 'pendiente', 'fallido')
+}
+
+
+Clientes ||--|| Suscripciones : "idCliente"
+TiposSuscripcion ||--o{ Suscripciones : "tipoSuscripcion"
+Suscripciones ||--o{ Pagos : "codigoSuscripcion"
+
+@enduml

@@ -1,0 +1,63 @@
+@startuml suscripciones
+
+start
+:Inicio de la aplicación;
+:Usuario accede al sistema;
+
+partition "Autenticación" {
+    if (¿Es administrador?) then (Sí)
+        :Acceso al Panel de Administración;
+        goto Administracion
+    else (No)
+        :Acceso al Panel de Usuario;
+        goto Usuario
+    endif
+}
+
+partition "Panel de Usuario" as Usuario {
+    :Ver mis suscripciones;
+    if (¿Tiene suscripción activa?) then (Sí)
+        :Ver detalles de suscripción;
+        :Ver historial de pagos;
+        :Ver fecha de expiración;
+        if (¿Renovar suscripción?) then (Sí)
+            :Realizar pago;
+            if (Pago exitoso?) then (Sí)
+                :Actualizar fecha de expiración;
+                :Notificar renovación exitosa;
+            else (No)
+                :Notificar error en el pago;
+            endif
+        else (No)
+            :Salir;
+        endif
+    else (No)
+        :Notificar que no tiene suscripciones activas;
+    endif
+    :Cerrar sesión;
+    end
+}
+
+partition "Panel de Administración" as Administracion {
+    :Gestionar Clientes;
+    :Gestionar Tipos de Suscripciones;
+    :Gestionar Suscripciones;
+
+    if (¿Ver pagos?) then (Sí)
+        :Consultar historial de pagos;
+    endif
+
+    if (¿Modificar suscripción?) then (Sí)
+        :Cambiar estado de suscripción (activa/inactiva);
+        :Registrar cambio en historial;
+    endif
+
+    if (¿Generar reportes?) then (Sí)
+        :Generar reportes de suscripciones y pagos;
+    endif
+
+    :Cerrar sesión;
+    end
+}
+
+@enduml
